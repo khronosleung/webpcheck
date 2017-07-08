@@ -46,7 +46,7 @@ function load(caseItemName, cb) {
         img.onload = img.onerror = null;
         img = null;
     };
-    img.src = TEST_IMAGES_BASE64[caseItemName];
+    img.src = `data:image/webp;base64,${TEST_IMAGES_BASE64[caseItemName]}`;
 }
 
 // ========== 检查流程
