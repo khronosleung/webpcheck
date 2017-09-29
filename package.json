@@ -1,22 +1,23 @@
 {
   "name": "webpcheck",
   "version": "1.0.0-beta.1",
-  "description": "webp check",
+  "description": "webp兼容性检查",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kidney/webpcheck.git"
   },
   "main": "lib/index.js",
-  "jsnext:main": "src/index.js",
-  "dependencies": {
-    "extend": "^3.0.1"
-  },
+  "module": "src/index.js",
   "scripts": {
-    "build": "babel src --out-dir lib"
+    "eslint": "eslint src/**",
+    "build": "npm run eslint && babel src --out-dir lib",
+    "watch": "babel --watch src --out-dir lib"
   },
   "devDependencies": {
-    "babel-cli": "^6.24.1",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-stage-1": "^6.24.1"
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.0.1",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "eslint": "^4.7.2"
   }
 }
