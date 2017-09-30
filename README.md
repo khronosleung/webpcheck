@@ -14,7 +14,7 @@ npm install --save webpcheck
 ```js
 import WebPCheck from 'webpcheck';
 
-if (WebPCheck()) {
+if (webPCheck()) {
     console.log('support');
 } else {
     console.log('not support');

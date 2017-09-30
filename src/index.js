@@ -21,13 +21,8 @@ function storageSetItem(val) {
 function storageGetItem() {
     return localStorage.getItem(STORAGE_KEY);
 }
-function extend(target, source) {
-    for (let key in source) {
-        if (source.hasOwnProperty(key)) {
-            target[key] = source[key];
-        }
-    }
-    return target;
+function storageRemoveItem() {
+    return localStorage.removeItem(STORAGE_KEY);
 }
 
 function load(caseItemName, cb) {
@@ -37,21 +32,32 @@ function load(caseItemName, cb) {
 
     let img = new Image();
     img.onload = function () {
-        cb((img.width > 0) && (img.height > 0));
+        cb(caseItemName, (img.width > 0) && (img.height > 0));
         img.onload = img.onerror = null;
         img = null;
     };
     img.onerror = function () {
-        cb(false);
+        cb(caseItemName, false);
         img.onload = img.onerror = null;
         img = null;
     };
     img.src = `data:image/webp;base64,${TEST_IMAGES_BASE64[caseItemName]}`;
 }
 
+const localStorageSupported = (() => {
+    try {
+        let str = 'test' + new Date().getTime();
+        localStorage.setItem(str, str);
+        localStorage.removeItem(str);
+        return true;
+    } catch(e){
+        return false;
+    }
+})();
+
 
 // ========== 配置
-const STORAGE_KEY = 'webPCheckResult';
+const STORAGE_KEY = '_webPCheckResult';
 
 // ========== 检查流程
 let WebPCheckResult = null;
@@ -61,7 +67,7 @@ export default function WebPCheck() {
         return WebPCheckResult;
     }
 
-    let storageResult = JSON.parse(storageGetItem());
+    let storageResult = localStorageSupported ? JSON.parse(storageGetItem()) : false;
     if (isObject(storageResult)) {
         WebPCheckResult = {
             lossy: storageResult.lossy === true || false,
@@ -75,19 +81,25 @@ export default function WebPCheck() {
         let totalCheck = testCases.length;
         let currentCheck = 0;
         while (caseItemName = testCases.shift()) {
-            load(caseItemName, (response) => {
+            load(caseItemName, (name, response) => {
                 ++currentCheck;
 
                 if (isNull(WebPCheckResult)) {
                     WebPCheckResult = {};
                 }
 
-                WebPCheckResult[caseItemName] = response;
+                WebPCheckResult[name] = response;
 
-                if (totalCheck === currentCheck) {
+                if (localStorageSupported && totalCheck === currentCheck) {
                     storageSetItem(JSON.stringify(WebPCheckResult));
                 }
             });
         }
     }
+
+    return WebPCheckResult;
+}
+
+WebPCheck.clean = () => {
+    storageRemoveItem();
 };
