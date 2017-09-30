@@ -10,7 +10,7 @@
   "module": "src/index.js",
   "scripts": {
     "watch": "webpack --watch --progress --colors --display-error-details",
-    "publish": "webpack --progress --colors --display-error-details "
+    "build": "webpack --progress --colors --display-error-details"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
