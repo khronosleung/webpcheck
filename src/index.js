@@ -60,21 +60,20 @@ const localStorageSupported = (() => {
 const STORAGE_KEY = '_webPCheckResult';
 
 // ========== 检查流程
+let WebPCheckResultDetail = null;
 let WebPCheckResult = null;
 
 export default function WebPCheck() {
     if (!isNull(WebPCheckResult)) {
-        return WebPCheckResult;
+        return !!WebPCheckResult;
     }
 
-    let storageResult = localStorageSupported ? JSON.parse(storageGetItem()) : false;
+    let storageResult = WebPCheck.result();
     if (isObject(storageResult)) {
-        WebPCheckResult = {
-            lossy: storageResult.lossy === true || false,
-            lossless: storageResult.lossless === true || false,
-            alpha: storageResult.alpha === true || false,
-            animation: storageResult.animation === true || false
-        };
+        WebPCheckResult = storageResult.lossy ||
+            storageResult.lossless ||
+            storageResult.alpha ||
+            storageResult.animation;
     } else {
         let testCases = ['lossy', 'lossless', 'alpha', 'animation'];
         let caseItemName;
@@ -84,22 +83,29 @@ export default function WebPCheck() {
             load(caseItemName, (name, response) => {
                 ++currentCheck;
 
-                if (isNull(WebPCheckResult)) {
-                    WebPCheckResult = {};
+                if (isNull(WebPCheckResultDetail)) {
+                    WebPCheckResultDetail = {};
                 }
 
-                WebPCheckResult[name] = response;
+                WebPCheckResultDetail[name] = response;
 
                 if (localStorageSupported && totalCheck === currentCheck) {
-                    storageSetItem(JSON.stringify(WebPCheckResult));
+                    storageSetItem(JSON.stringify(WebPCheckResultDetail));
+                    WebPCheckResultDetail = null;
                 }
             });
         }
     }
 
-    return WebPCheckResult;
+    return !!WebPCheckResult;
 }
 
 WebPCheck.clean = () => {
+    WebPCheckResult = null;
     storageRemoveItem();
+};
+
+
+WebPCheck.result = () => {
+    return localStorageSupported ? JSON.parse(storageGetItem()) : false;
 };

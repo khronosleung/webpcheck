@@ -1,6 +1,6 @@
 {
   "name": "webpcheck",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "webp兼容性检查",
   "repository": {
     "type": "git",
@@ -14,13 +14,13 @@
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
-    "babel-eslint": "^8.0.1",
+    "babel-eslint": "^8.0.2",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.0",
-    "eslint": "^4.7.2",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.11.0",
     "eslint-loader": "^1.9.0",
-    "webpack": "^3.6.0"
+    "webpack": "^3.8.1"
   }
 }

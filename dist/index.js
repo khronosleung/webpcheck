@@ -153,21 +153,17 @@ var localStorageSupported = function () {
 var STORAGE_KEY = '_webPCheckResult';
 
 // ========== 检查流程
+var WebPCheckResultDetail = null;
 var WebPCheckResult = null;
 
 function WebPCheck() {
     if (!isNull(WebPCheckResult)) {
-        return WebPCheckResult;
+        return !!WebPCheckResult;
     }
 
-    var storageResult = localStorageSupported ? JSON.parse(storageGetItem()) : false;
+    var storageResult = WebPCheck.result();
     if (isObject(storageResult)) {
-        WebPCheckResult = {
-            lossy: storageResult.lossy === true || false,
-            lossless: storageResult.lossless === true || false,
-            alpha: storageResult.alpha === true || false,
-            animation: storageResult.animation === true || false
-        };
+        WebPCheckResult = storageResult.lossy || storageResult.lossless || storageResult.alpha || storageResult.animation;
     } else {
         (function () {
             var testCases = ['lossy', 'lossless', 'alpha', 'animation'];
@@ -178,25 +174,31 @@ function WebPCheck() {
                 load(caseItemName, function (name, response) {
                     ++currentCheck;
 
-                    if (isNull(WebPCheckResult)) {
-                        WebPCheckResult = {};
+                    if (isNull(WebPCheckResultDetail)) {
+                        WebPCheckResultDetail = {};
                     }
 
-                    WebPCheckResult[name] = response;
+                    WebPCheckResultDetail[name] = response;
 
                     if (localStorageSupported && totalCheck === currentCheck) {
-                        storageSetItem((0, _stringify2.default)(WebPCheckResult));
+                        storageSetItem((0, _stringify2.default)(WebPCheckResultDetail));
+                        WebPCheckResultDetail = null;
                     }
                 });
             }
         })();
     }
 
-    return WebPCheckResult;
+    return !!WebPCheckResult;
 }
 
 WebPCheck.clean = function () {
+    WebPCheckResult = null;
     storageRemoveItem();
+};
+
+WebPCheck.result = function () {
+    return localStorageSupported ? JSON.parse(storageGetItem()) : false;
 };
 
 /***/ }),

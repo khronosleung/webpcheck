@@ -19,4 +19,10 @@ if (webPCheck()) {
 } else {
     console.log('not support');
 }
+
+// 获取判断的缓存结果
+webPCheck.result();
+
+// 清除判断的缓存结果
+webPCheck.clean();
 ```

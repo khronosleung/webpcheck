@@ -5,14 +5,37 @@
     <title>Title</title>
 </head>
 <body>
-
+<button type="button" id="js-check-button">check</button>
+<button type="button" id="js-clean-button">clean</button>
+<button type="button" id="js-result-button">result</button>
+<div id="js-result"></div>
 <script src="../dist/index.js"></script>
 <script>
-    if (webPCheck()) {
-        console.log('support');
-    } else {
-        console.log('not support');
+    var $result = document.getElementById('js-result');
+    function check() {
+        if (webPCheck()) {
+            $result.innerHTML = 'support';
+            console.log('support');
+        } else {
+            $result.innerHTML = 'not support';
+            console.log('not support');
+        }
     }
+
+    var $checkButton = document.getElementById('js-check-button');
+    $checkButton.onclick = function () {
+        check()
+    };
+    var $cleanButton = document.getElementById('js-clean-button');
+    $cleanButton.onclick = function () {
+        webPCheck.clean();
+        $result.innerHTML = '';
+    };
+    var $resultButton = document.getElementById('js-result-button');
+    $resultButton.onclick = function () {
+        alert(JSON.stringify(webPCheck.result()));
+    };
+    check();
 </script>
 </body>
 </html>
