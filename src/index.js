@@ -62,38 +62,36 @@ const STORAGE_KEY = '_webPCheckResult';
 // ========== 检查流程
 let WebPCheckResultDetail = null;
 let WebPCheckResult = null;
+let WebPCheckState = null;
 
 export default function WebPCheck() {
-    if (!isNull(WebPCheckResult)) {
-        return !!WebPCheckResult;
-    }
+    if (isNull(WebPCheckResult)) {
+        let storageResult = WebPCheck.result();
+        if (isObject(storageResult)) {
+            WebPCheckResult = storageResult.lossy ||
+                storageResult.lossless ||
+                storageResult.alpha ||
+                storageResult.animation;
+        } else if (isNull(WebPCheckState) && isNull(WebPCheckResultDetail)) {
+            WebPCheckResultDetail = {};
+            WebPCheckState = 'checking';
 
-    let storageResult = WebPCheck.result();
-    if (isObject(storageResult)) {
-        WebPCheckResult = storageResult.lossy ||
-            storageResult.lossless ||
-            storageResult.alpha ||
-            storageResult.animation;
-    } else {
-        let testCases = ['lossy', 'lossless', 'alpha', 'animation'];
-        let caseItemName;
-        let totalCheck = testCases.length;
-        let currentCheck = 0;
-        while (caseItemName = testCases.shift()) {
-            load(caseItemName, (name, response) => {
-                ++currentCheck;
+            let testCases = ['lossy', 'lossless', 'alpha', 'animation'];
+            let caseItemName;
+            let totalCheck = testCases.length;
+            let currentCheck = 0;
+            while (caseItemName = testCases.shift()) {
+                load(caseItemName, (name, response) => {
+                    ++currentCheck;
 
-                if (isNull(WebPCheckResultDetail)) {
-                    WebPCheckResultDetail = {};
-                }
+                    WebPCheckResultDetail[name] = response;
 
-                WebPCheckResultDetail[name] = response;
-
-                if (localStorageSupported && totalCheck === currentCheck) {
-                    storageSetItem(JSON.stringify(WebPCheckResultDetail));
-                    WebPCheckResultDetail = null;
-                }
-            });
+                    if (localStorageSupported && totalCheck === currentCheck) {
+                        storageSetItem(JSON.stringify(WebPCheckResultDetail));
+                        WebPCheckState = 'done';
+                    }
+                });
+            }
         }
     }
 
@@ -101,11 +99,23 @@ export default function WebPCheck() {
 }
 
 WebPCheck.clean = () => {
+    WebPCheckResultDetail = null;
     WebPCheckResult = null;
+    WebPCheckState = null;
     storageRemoveItem();
 };
 
 
 WebPCheck.result = () => {
-    return localStorageSupported ? JSON.parse(storageGetItem()) : false;
+    if (localStorageSupported) {
+        return JSON.parse(storageGetItem());
+    } else if (localStorageSupported === false && isObject(WebPCheckResultDetail)) {
+        return WebPCheckResultDetail;
+    } else {
+        return false;
+    }
+};
+
+WebPCheck.state = () => {
+    return WebPCheckState;
 };

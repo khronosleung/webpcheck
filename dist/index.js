@@ -7,7 +7,7 @@
 		exports["webPCheck"] = factory();
 	else
 		root["webPCheck"] = factory();
-})(this, function() {
+})(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -155,50 +155,60 @@ var STORAGE_KEY = '_webPCheckResult';
 // ========== 检查流程
 var WebPCheckResultDetail = null;
 var WebPCheckResult = null;
+var WebPCheckState = null;
 
 function WebPCheck() {
-    if (!isNull(WebPCheckResult)) {
-        return !!WebPCheckResult;
-    }
+    if (isNull(WebPCheckResult)) {
+        var storageResult = WebPCheck.result();
+        if (isObject(storageResult)) {
+            WebPCheckResult = storageResult.lossy || storageResult.lossless || storageResult.alpha || storageResult.animation;
+        } else if (isNull(WebPCheckState) && isNull(WebPCheckResultDetail)) {
+            (function () {
+                WebPCheckResultDetail = {};
+                WebPCheckState = 'checking';
 
-    var storageResult = WebPCheck.result();
-    if (isObject(storageResult)) {
-        WebPCheckResult = storageResult.lossy || storageResult.lossless || storageResult.alpha || storageResult.animation;
-    } else {
-        (function () {
-            var testCases = ['lossy', 'lossless', 'alpha', 'animation'];
-            var caseItemName = void 0;
-            var totalCheck = testCases.length;
-            var currentCheck = 0;
-            while (caseItemName = testCases.shift()) {
-                load(caseItemName, function (name, response) {
-                    ++currentCheck;
+                var testCases = ['lossy', 'lossless', 'alpha', 'animation'];
+                var caseItemName = void 0;
+                var totalCheck = testCases.length;
+                var currentCheck = 0;
+                while (caseItemName = testCases.shift()) {
+                    load(caseItemName, function (name, response) {
+                        ++currentCheck;
 
-                    if (isNull(WebPCheckResultDetail)) {
-                        WebPCheckResultDetail = {};
-                    }
+                        WebPCheckResultDetail[name] = response;
 
-                    WebPCheckResultDetail[name] = response;
-
-                    if (localStorageSupported && totalCheck === currentCheck) {
-                        storageSetItem((0, _stringify2.default)(WebPCheckResultDetail));
-                        WebPCheckResultDetail = null;
-                    }
-                });
-            }
-        })();
+                        if (localStorageSupported && totalCheck === currentCheck) {
+                            storageSetItem((0, _stringify2.default)(WebPCheckResultDetail));
+                            WebPCheckState = 'done';
+                        }
+                    });
+                }
+            })();
+        }
     }
 
     return !!WebPCheckResult;
 }
 
 WebPCheck.clean = function () {
+    WebPCheckResultDetail = null;
     WebPCheckResult = null;
+    WebPCheckState = null;
     storageRemoveItem();
 };
 
 WebPCheck.result = function () {
-    return localStorageSupported ? JSON.parse(storageGetItem()) : false;
+    if (localStorageSupported) {
+        return JSON.parse(storageGetItem());
+    } else if (localStorageSupported === false && isObject(WebPCheckResultDetail)) {
+        return WebPCheckResultDetail;
+    } else {
+        return false;
+    }
+};
+
+WebPCheck.state = function () {
+    return WebPCheckState;
 };
 
 /***/ }),
