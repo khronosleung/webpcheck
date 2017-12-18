@@ -14,15 +14,15 @@ npm install --save webpcheck
 ```js
 import WebPCheck from 'webpcheck';
 
-if (webPCheck()) {
+if (WebPCheck()) {
     console.log('support');
 } else {
     console.log('not support');
 }
 
 // 获取判断的缓存结果
-webPCheck.result();
+WebPCheck.result();
 
 // 清除判断的缓存结果
-webPCheck.clean();
+WebPCheck.clean();
 ```

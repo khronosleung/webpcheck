@@ -13,7 +13,7 @@
 <script>
     var $result = document.getElementById('js-result');
     function check() {
-        if (webPCheck()) {
+        if (WebPCheck()) {
             $result.innerHTML = 'support';
             console.log('support');
         } else {
@@ -28,12 +28,12 @@
     };
     var $cleanButton = document.getElementById('js-clean-button');
     $cleanButton.onclick = function () {
-        webPCheck.clean();
+        WebPCheck.clean();
         $result.innerHTML = '';
     };
     var $resultButton = document.getElementById('js-result-button');
     $resultButton.onclick = function () {
-        alert(JSON.stringify(webPCheck.result()));
+        alert(JSON.stringify(WebPCheck.result()));
     };
     check();
 </script>

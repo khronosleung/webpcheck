@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["webPCheck"] = factory();
+		exports["WebPCheck"] = factory();
 	else
-		root["webPCheck"] = factory();
+		root["WebPCheck"] = factory();
 })(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache

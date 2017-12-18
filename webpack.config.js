@@ -10,7 +10,7 @@ module.exports = {
     },
 
     output: {
-        library: 'webPCheck',
+        library: 'WebPCheck',
         libraryTarget: 'umd',
         libraryExport: 'default',
         publicPath: '',
