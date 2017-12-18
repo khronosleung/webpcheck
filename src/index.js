@@ -120,3 +120,4 @@ WebPCheck.result = () => {
 WebPCheck.state = () => {
     return WebPCheckState;
 };
+WebPCheck();

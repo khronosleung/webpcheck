@@ -211,6 +211,7 @@ WebPCheck.result = function () {
 WebPCheck.state = function () {
     return WebPCheckState;
 };
+WebPCheck();
 
 /***/ }),
 /* 1 */
