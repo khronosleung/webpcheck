@@ -68,6 +68,7 @@ export default function WebPCheck() {
     if (isNull(WebPCheckResult)) {
         let storageResult = WebPCheck.result();
         if (isObject(storageResult)) {
+            WebPCheckState = 'done';
             WebPCheckResult = storageResult.lossy ||
                 storageResult.lossless ||
                 storageResult.alpha ||
