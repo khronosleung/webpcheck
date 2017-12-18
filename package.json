@@ -1,6 +1,6 @@
 {
   "name": "webpcheck",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "webp兼容性检查",
   "repository": {
     "type": "git",
