@@ -5,6 +5,17 @@ const TEST_IMAGES_BASE64 = {
     animation: 'UklGRlIAAABXRUJQVlA4WAoAAAASAAAAAAAAAAAAQU5JTQYAAAD/////AABBTk1GJgAAAAAAAAAAAAAAAAAAAGQAAABWUDhMDQAAAC8AAAAQBxAREYiI/gcA'
 };
 
+const localStorageSupported = (() => {
+    try {
+        let str = 'test' + new Date().getTime();
+        localStorage.setItem(str, str);
+        localStorage.removeItem(str);
+        return true;
+    } catch (e) {
+        return false;
+    }
+})();
+
 // ========== 常用函数
 function isType(s, typeString) {
     return {}.toString.call(s) === `[object ${typeString}]`;
@@ -16,13 +27,13 @@ function isNull(s) {
     return isType(s, 'Null');
 }
 function storageSetItem(val) {
-    localStorage.setItem(STORAGE_KEY, val);
+    localStorageSupported && localStorage.setItem(STORAGE_KEY, val);
 }
 function storageGetItem() {
-    return localStorage.getItem(STORAGE_KEY);
+    return localStorageSupported ? localStorage.getItem(STORAGE_KEY) : false;
 }
 function storageRemoveItem() {
-    return localStorage.removeItem(STORAGE_KEY);
+    return localStorageSupported ? localStorage.removeItem(STORAGE_KEY) : false;
 }
 
 function load(caseItemName, cb) {
@@ -43,17 +54,6 @@ function load(caseItemName, cb) {
     };
     img.src = `data:image/webp;base64,${TEST_IMAGES_BASE64[caseItemName]}`;
 }
-
-const localStorageSupported = (() => {
-    try {
-        let str = 'test' + new Date().getTime();
-        localStorage.setItem(str, str);
-        localStorage.removeItem(str);
-        return true;
-    } catch(e){
-        return false;
-    }
-})();
 
 
 // ========== 配置
@@ -87,7 +87,7 @@ export default function WebPCheck() {
 
                     WebPCheckResultDetail[name] = response;
 
-                    if (localStorageSupported && totalCheck === currentCheck) {
+                    if (totalCheck === currentCheck) {
                         storageSetItem(JSON.stringify(WebPCheckResultDetail));
                         WebPCheckState = 'done';
                     }
