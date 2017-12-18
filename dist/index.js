@@ -161,6 +161,7 @@ function WebPCheck() {
     if (isNull(WebPCheckResult)) {
         var storageResult = WebPCheck.result();
         if (isObject(storageResult)) {
+            WebPCheckState = 'done';
             WebPCheckResult = storageResult.lossy || storageResult.lossless || storageResult.alpha || storageResult.animation;
         } else if (isNull(WebPCheckState) && isNull(WebPCheckResultDetail)) {
             (function () {
