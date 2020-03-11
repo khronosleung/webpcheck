@@ -1,25 +1,37 @@
 {
   "name": "webpcheck",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "description": "webp兼容性检查",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kidneyleung/webpcheck.git"
   },
-  "main": "dist/index.js",
+  "main": "dist/cjs",
+  "module": "dist/esm/webpcheck.js",
+  "browser": "dist/umd/webpcheck.js",
   "scripts": {
-    "watch": "webpack --watch --progress --colors --display-error-details",
-    "build": "webpack --progress --colors --display-error-details"
+    "clean:dist": "rimraf dist",
+    "clean": "npm run clean:dist",
+    "build": "npm run lint && NODE_ENV=production && npm run clean && rollup -c",
+    "lint": "eslint --fix ./src/*.js"
   },
+  "files": [
+    "dist"
+  ],
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-eslint": "^8.0.3",
-    "babel-loader": "^7.1.2",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "eslint": "^4.13.1",
-    "eslint-loader": "^1.9.0",
-    "webpack": "^3.10.0"
+    "@babel/core": "^7.8.7",
+    "@babel/preset-env": "^7.8.7",
+    "@babel/runtime-corejs3": "^7.8.7",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.20.1",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.0.3",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-replace": "^2.2.0",
+    "rollup-plugin-terser": "^5.3.0",
+    "uglify-es": "^3.3.10"
   }
 }
