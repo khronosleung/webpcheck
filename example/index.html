@@ -9,11 +9,11 @@
 <button type="button" id="js-clean-button">clean</button>
 <button type="button" id="js-result-button">result</button>
 <div id="js-result"></div>
-<script src="../dist/index.js"></script>
+<script src="../dist/umd/webpcheck.js"></script>
 <script>
     var $result = document.getElementById('js-result');
     function check() {
-        if (WebPCheck()) {
+        if (WebPCheck.check()) {
             $result.innerHTML = 'support';
             console.log('support');
         } else {
