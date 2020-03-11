@@ -8,6 +8,7 @@ module.exports = {
     'airbnb-base',
   ],
   globals: {
+    __WebPCheckAuto: 'readonly',
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
   },

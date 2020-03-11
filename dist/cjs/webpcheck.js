@@ -97,6 +97,10 @@ function state() {
   return WebPCheckState;
 } // ========== 检查流程
 
+/**
+ * @return {boolean}
+ */
+
 function WebPCheck() {
   if (isNull(WebPCheckResult)) {
     var storageResult = result();
@@ -107,8 +111,7 @@ function WebPCheck() {
     } else if (isNull(WebPCheckState) && isNull(WebPCheckResultDetail)) {
       WebPCheckResultDetail = {};
       WebPCheckState = 'checking';
-      var testCases = ['lossy', 'lossless', 'alpha', 'animation']; // let caseItemName;
-
+      var testCases = ['lossy', 'lossless', 'alpha', 'animation'];
       var totalCheck = testCases.length;
       var currentCheck = 0;
       testCases.forEach(function (caseItemName) {
@@ -131,8 +134,9 @@ function WebPCheck() {
 function check() {
   return WebPCheck();
 }
+/* eslint no-underscore-dangle: ["error", { "allow": ["__WebPCheckAuto"] }] */
 
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && typeof window.__WebPCheckAuto !== 'undefined') {
   WebPCheck();
 }
 

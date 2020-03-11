@@ -8,5 +8,5 @@ else if(l(c)&&l(r)){r={},c="checking"
 var t=["lossy","lossless","alpha","animation"],i=t.length,s=0
 t.forEach((function(A){!function(A,n){if(e[A]){var t=new Image
 t.onload=function(){n(A,t.width>0&&t.height>0),t.onload=null,t.onerror=null,t=null},t.onerror=function(){n(A,!1),t.onload=null,t.onerror=null,t=null},t.src="data:image/webp;base64,".concat(e[A])}}(A,(function(A,e){var t
-s+=1,r[A]=e,i===s&&(t=JSON.stringify(r),n&&localStorage.setItem("_webPCheckResult",t),c="done")}))}))}}return!!a}"undefined"!=typeof window&&i(),A.check=function(){return i()},A.clean=function(){r=null,a=null,c=null,n&&localStorage.removeItem("_webPCheckResult")},A.result=u,A.state=function(){return c},Object.defineProperty(A,"__esModule",{value:!0})}))
+s+=1,r[A]=e,i===s&&(t=JSON.stringify(r),n&&localStorage.setItem("_webPCheckResult",t),c="done")}))}))}}return!!a}"undefined"!=typeof window&&void 0!==window.__WebPCheckAuto&&i(),A.check=function(){return i()},A.clean=function(){r=null,a=null,c=null,n&&localStorage.removeItem("_webPCheckResult")},A.result=u,A.state=function(){return c},Object.defineProperty(A,"__esModule",{value:!0})}))
 //# sourceMappingURL=webpcheck.js.map
